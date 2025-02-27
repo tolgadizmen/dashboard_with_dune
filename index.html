@@ -3,23 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Builder Plus Revenue</title>
+    <title>Dashboard with Dune Data</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="content">
-        <h1>Builder Plus Total Revenue</h1>
+        <h1>Dashboard with Dune Data</h1>
         <div id="loading">Loading data...</div>
         <div id="error" style="display: none; color: red;"></div>
-        <div id="revenue" style="display: none;">
-            <div class="value-container">
-                <span class="value" id="revenueValue">0</span>
-                <span class="unit">ETH</span>
+
+        <!-- Revenue Section -->
+        <div class="section">
+            <h2>Builder Plus Total Revenue</h2>
+            <div id="revenue" style="display: none;">
+                <div class="value-container">
+                    <span class="value" id="revenueValue">0</span>
+                    <span class="unit">ETH</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stakers Section -->
+        <div class="section">
+            <h2>Talent Vault Stakers</h2>
+            <div id="stakers" style="display: none;">
+                <table id="stakersTable">
+                    <thead>
+                        <tr>
+                            <th>Staker Address</th>
+                            <th>Total Staked $TALENT</th>
+                            <th>Builder Score</th>
+                            <th>Latest Staking Time</th>
+                            <th>Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleString();
+        }
+
+        function formatAddress(address) {
+            return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+        }
+
         async function fetchDuneData() {
             try {
                 const response = await fetch('/api/dune-data');
@@ -33,17 +67,36 @@
                     return;
                 }
 
+                // Update Revenue
                 const revenueDiv = document.getElementById('revenue');
                 const revenueValue = document.getElementById('revenueValue');
                 revenueDiv.style.display = 'block';
                 
-                // Format the value to 4 decimal places
                 const formattedValue = Number(data.total_builderplus_revenue_eth).toLocaleString(undefined, {
                     minimumFractionDigits: 4,
                     maximumFractionDigits: 4
                 });
                 
                 revenueValue.textContent = formattedValue;
+
+                // Update Stakers Table
+                const stakersDiv = document.getElementById('stakers');
+                const tbody = document.getElementById('stakersTable').querySelector('tbody');
+                stakersDiv.style.display = 'block';
+                
+                tbody.innerHTML = data.stakers.map(staker => `
+                    <tr>
+                        <td>${formatAddress(staker.address)}</td>
+                        <td>${Number(staker.total_staked).toLocaleString()}</td>
+                        <td>${staker.score || 'N/A'}</td>
+                        <td>${formatDate(staker.last_staking_time)}</td>
+                        <td>
+                            ${staker.profile_url ? 
+                                `<a href="${staker.profile_url}" target="_blank">View Profile</a>` : 
+                                'N/A'}
+                        </td>
+                    </tr>
+                `).join('');
 
             } catch (error) {
                 console.error('Frontend Error:', error);

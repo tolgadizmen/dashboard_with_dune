@@ -8,18 +8,30 @@ export default async function handler(req, res) {
     };
 
     try {
-        const url = 'https://api.dune.com/api/v1/query/4740114/results?limit=1000';
-        const response = await fetch(url, options);
+        // Fetch Builder Plus Revenue
+        const revenueUrl = 'https://api.dune.com/api/v1/query/4740114/results?limit=1000';
+        const revenueResponse = await fetch(revenueUrl, options);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Fetch Talent Vault Stakers
+        const stakersUrl = 'https://api.dune.com/api/v1/query/4599454/results?limit=1000';
+        const stakersResponse = await fetch(stakersUrl, options);
+
+        if (!revenueResponse.ok || !stakersResponse.ok) {
+            throw new Error(`HTTP error! status: ${revenueResponse.status} ${stakersResponse.status}`);
         }
 
-        const data = await response.json();
-        
-        // Extract the specific data point we need
+        const revenueData = await revenueResponse.json();
+        const stakersData = await stakersResponse.json();
+
         const result = {
-            total_builderplus_revenue_eth: data.result.rows[0].total_builderplus_revenue_eth
+            total_builderplus_revenue_eth: revenueData.result.rows[0].total_builderplus_revenue_eth,
+            stakers: stakersData.result.rows.map(row => ({
+                address: row.unique_staker_address,
+                total_staked: row.total_staked,
+                profile_url: row.passport_profile_url,
+                score: row.score,
+                last_staking_time: row.staker_evt_block_time
+            }))
         };
 
         res.status(200).json(result);
