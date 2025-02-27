@@ -30,11 +30,11 @@
                 <table id="stakersTable">
                     <thead>
                         <tr>
-                            <th>Staker Address</th>
+                            <th>Staker</th>
                             <th>Total Staked $TALENT</th>
                             <th>Builder Score</th>
                             <th>Latest Staking Time</th>
-                            <th>Profile</th>
+                            <th>Talent Profile</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,12 @@
                 const tbody = document.getElementById('stakersTable').querySelector('tbody');
                 stakersDiv.style.display = 'block';
                 
-                tbody.innerHTML = data.stakers.map(staker => `
+                // Sort stakers by latest staking time in descending order
+                const sortedStakers = [...data.stakers].sort((a, b) => 
+                    new Date(b.last_staking_time) - new Date(a.last_staking_time)
+                );
+                
+                tbody.innerHTML = sortedStakers.map(staker => `
                     <tr>
                         <td>${formatAddress(staker.address)}</td>
                         <td>${Number(staker.total_staked).toLocaleString()}</td>
