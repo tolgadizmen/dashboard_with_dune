@@ -92,7 +92,7 @@
                 tbody.innerHTML = sortedStakers.map(staker => `
                     <tr>
                         <td>${formatAddress(staker.address)}</td>
-                        <td>${Number(staker.total_staked).toLocaleString()}</td>
+                        <td>${Math.round(staker.total_staked).toLocaleString()}</td>
                         <td>${staker.score || 'N/A'}</td>
                         <td>${formatDate(staker.last_staking_time)}</td>
                         <td>
