@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Builder Plus Revenue</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="content">
+        <h1>Builder Plus Total Revenue</h1>
+        <div id="loading">Loading data...</div>
+        <div id="error" style="display: none; color: red;"></div>
+        <div id="revenue" style="display: none;">
+            <div class="value-container">
+                <span class="value" id="revenueValue">0</span>
+                <span class="unit">ETH</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchDuneData() {
+            try {
+                const response = await fetch('/api/dune-data');
+                const data = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (data.error) {
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = data.error;
+                    return;
+                }
+
+                const revenueDiv = document.getElementById('revenue');
+                const revenueValue = document.getElementById('revenueValue');
+                revenueDiv.style.display = 'block';
+                
+                // Format the value to 4 decimal places
+                const formattedValue = Number(data.total_builderplus_revenue_eth).toLocaleString(undefined, {
+                    minimumFractionDigits: 4,
+                    maximumFractionDigits: 4
+                });
+                
+                revenueValue.textContent = formattedValue;
+
+            } catch (error) {
+                console.error('Frontend Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Error loading data. Please check console for details.';
+            }
+        }
+
+        fetchDuneData();
+    </script>
+</body>
+</html> 

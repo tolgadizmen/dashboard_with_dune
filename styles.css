@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+body {
+    font-family: 'IBM Plex Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: #ffffff;
+    color: #000000;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.content {
+    text-align: center;
+    padding: 40px;
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    max-width: 800px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.content:hover {
+    transform: none;
+}
+
+h1 {
+    margin-bottom: 40px;
+    font-size: 1.8em;
+    font-weight: 500;
+}
+
+#loading {
+    margin: 20px 0;
+    font-style: italic;
+}
+
+#error {
+    color: red;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid red;
+    display: none;
+}
+
+.value-container {
+    margin: 40px 0;
+    padding: 20px;
+    border: 2px solid #000000;
+    display: inline-block;
+}
+
+.value {
+    font-size: 3em;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.unit {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.nav {
+    margin-top: 30px;
+}
+
+.nav a {
+    display: inline-block;
+    padding: 12px 24px;
+    color: #ffffff;
+    background-color: #000000;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 2px solid #000000;
+}
+
+.nav a:hover {
+    color: #000000;
+    background-color: #ffffff;
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    .content {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.4em;
+    }
+    
+    .value {
+        font-size: 2em;
+    }
+    
+    .unit {
+        font-size: 1.2em;
+    }
+    
+    .bar-container {
+        width: 30px;
+    }
+    
+    .bar-fill {
+        width: 15px;
+    }
+    
+    .bar-label {
+        font-size: 10px;
+    }
+    
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+/* Add these new table styles at the end of the file */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #000000;
+}
+
+th {
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Add these new styles for the chart section */
+.chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 250px;
+    padding: 20px 10px;
+    border-bottom: 2px solid #000000;
+    margin-bottom: 10px;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+}
+
+.bar-fill {
+    width: 20px;
+    background-color: #000000;
+    transition: height 0.3s ease;
+}
+
+.bar-container:hover .bar-fill {
+    background-color: #666666;
+}
+
+.bar-label {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.value-label {
+    margin-bottom: 5px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bar-container:hover .value-label {
+    opacity: 1;
+}
+
+.axis-label {
+    text-align: left;
+    padding-left: 20px;
+    font-size: 12px;
+    color: #000000;
+}
+
+#chart {
+    overflow-x: auto;
+} 
